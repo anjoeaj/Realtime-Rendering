@@ -8,6 +8,8 @@ Mesh::Mesh()
 	VBO = 0;
 	IBO = 0;
 	indexCount = 0;
+	skyboxVAO = 0;
+	skyboxVBO = 0;
 
 }
 
@@ -49,6 +51,40 @@ void Mesh::RenderMesh() {
 	glBindVertexArray(0);
 }
 
+void Mesh::CreateSkyBoxMesh(GLfloat *skyboxVertices) {
+	//unsigned int skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	//GLuint positionID = glGetAttribLocation(shaderProgramID, "aPos");
+	// Have to enable this
+	//glEnableVertexAttribArray(positionID);
+}
+
+void Mesh::RenderSkyBox(GLuint cubemapTexture) {
+
+	glBindVertexArray(skyboxVAO);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthFunc(GL_LESS); // set depth function back to default
+	
+}
+
+void Mesh::RenderSkyBox1(GLuint cubemapTexture) {
+
+	glBindVertexArray(skyboxVAO);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+}
+
 void Mesh::ClearMesh(){
 	if (IBO != 0) {
 		glDeleteBuffers(1, &IBO);
@@ -63,6 +99,16 @@ void Mesh::ClearMesh(){
 	if (VAO != 0) {
 		glDeleteVertexArrays(1, &VAO);
 		VAO = 0;
+	}
+
+	if (skyboxVBO != 0) {
+		glDeleteBuffers(1, &skyboxVBO);
+		skyboxVBO = 0;
+	}
+
+	if (skyboxVAO != 0) {
+		glDeleteVertexArrays(1, &skyboxVAO);
+		skyboxVAO = 0;
 	}
 
 	indexCount = 0;

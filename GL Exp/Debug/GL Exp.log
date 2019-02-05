@@ -1,31 +1,11 @@
-﻿  Camera.cpp
-  Light.cpp
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(25): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(26): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(28): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(29): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (GL Exp.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(258): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(287): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(319): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(340): warning C4305: '+=': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(347): warning C4305: '+=': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(349): warning C4305: '-=': truncation from 'double' to 'GLfloat'
-  Material.cpp
-  Mesh.cpp
-  Model.cpp
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(29): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(108): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-  MyGLWindow.cpp
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(175): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(176): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(180): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(181): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(184): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(185): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-  Shader.cpp
-  Texture.cpp
-  Generating Code...
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(89): warning C4715: 'MyGLWindow::Initialise': not all control paths return a value
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  GL Exp.vcxproj -> D:\Learning\OpenGL refactor\RTR\Debug\GL Exp.exe
+c:\program files (x86)\windows kits\10\include\10.0.17134.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  d:\learning\opengl refactor\realtime rendering\ext libs\glfw\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(314): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(356): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(373): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(487): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(494): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(496): warning C4305: '-=': truncation from 'double' to 'GLfloat'
+  GL Exp.vcxproj -> D:\Learning\OpenGL refactor\Realtime Rendering\Debug\Realtime Rendering.exe

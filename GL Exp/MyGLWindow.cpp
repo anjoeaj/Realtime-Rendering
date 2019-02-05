@@ -45,7 +45,7 @@ int MyGLWindow::Initialise() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	//create the main window
-	mainWindow = glfwCreateWindow(width, height, "Open GL Experiments", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, "Real-time Rendering", NULL, NULL);
 
 	if (!mainWindow) {
 		printf("GLFW window creation failed");

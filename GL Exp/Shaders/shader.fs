@@ -28,7 +28,7 @@ in vec3 FragPos;
 out vec4 colour;
 
 uniform vec3 eyePosition;
-
+uniform samplerCube skybox;
 
 
 uniform sampler2D theTexture;
@@ -203,38 +203,68 @@ void main()
 {
 	//printf("Illum type is %d", material.illuminationType);
 	//colour = Phong();
+	/*
 	if(material.illuminationType == 0)
 		colour = Phong();
 	if(material.illuminationType == 1)
 		colour = Toon();
 	if(material.illuminationType == 2)
 		colour = cookTorrance();
+	*/
+	
+	//Reflectance starts
+	vec3 ViewDir = normalize(FragPos - eyePosition);
+	vec3 HalfVec = normalize(ViewDir - directionalLight.direction);
+	
+	//reflection
+	vec3 ReflectedRay = reflect(ViewDir, normalize(Normal));
+    vec3 ReflectedColour = texture(skybox, ReflectedRay).rgb;
+	
+	colour = vec4(ReflectedColour, 1.0f);
+	
+	//refraction
+	float ratio = 1.00 / 2.42;
+    //vec3 I = normalize(FragPos - eyePosition);
+    vec3 RefractedRay = refract(ViewDir, normalize(-Normal), ratio);
+	vec3 RefractedColour = texture(skybox, RefractedRay).rgb;
+	colour = vec4(RefractedColour, 1.0f);
+	
+	//Fresnel component - 
+	//Wikipedia
+	//In 3D computer graphics, Schlick's approximation, named after Christophe Schlick, 
+	//is a formula for approximating the contribution of the Fresnel factor in 
+	//the specular reflection of light from a non-conducting interface (surface) between two media.
+	
+	//According to Schlick's model, the specular reflection coefficient R can be approximated by:
+	//diamond f0 = 0.45, ratio = 1/2.42
+	//glass f0 = 0.31 ratio = 1/1.52
 	
 	
-	//vec3 initColor = vec3(1.0f,1.0f,1.0f);
-	//specularColour.xyz = ComputeCookTorranceReflection(directionalLight.direction.xyz, fragToEye.xyz, Normal.xyz, initColor.xyz);
-	//specularColour = vec4(specularColour.xyz, 1.0f);
-	//colour = texture(theTexture, TexCoord) * (ambientColour + diffuseColour + specularColour);
-	
-	
+	vec3 F0 = vec3 (0.45);
+	//F0 = mix(F0, albedo1, metallic1);
+	//vec3 reflectionCoefficient = fresnelSchlick(max(dot(HalfVec, ViewDir), 0.0), F0);
+	vec3 reflectionCoefficient = fresnelSchlick(max(dot(HalfVec, ViewDir), 0.0), F0);
 
-	//colour = (ambientColour + diffuseColour + specularColour);
+	//With Fresnel component
+	colour = vec4(mix(RefractedColour, ReflectedColour, reflectionCoefficient), 1.0);
 	
+	/*
+	//Chromatic Abberation
+	float ratioRed = ratio - 0.05;
+	float ratioGreen = ratio - 0.03;
+	float ratioBlue = ratio - 0.01;
+	
+	vec3 RedRefraction = refract(ViewDir, normalize(-Normal), ratioRed);
+	vec3 GreenRefraction = refract(ViewDir, normalize(-Normal), ratioGreen);
+	vec3 BlueRefraction = refract(ViewDir, normalize(-Normal), ratioBlue);
+	
+	vec3 abberatedColor;
+	abberatedColor.r = vec3(texture(skybox, RedRefraction)).r;
+	abberatedColor.g = vec3(texture(skybox, GreenRefraction)).g;
+	abberatedColor.b = vec3(texture(skybox, BlueRefraction)).b;
+	
+    colour = vec4(mix(ReflectedColour, abberatedColor, reflectionCoefficient), 1.0);
+	*/
+	//chromatic abberation
 	
 }
-
-const int NUM_SAMPLES = 1024;
-const float speed = 4;
-void rayCasting(){
-	vec3 fragToEye = normalize(eyePosition - FragPos);
-	for (int i = 0; i < NUM_SAMPLES; ++i) {
-		float t = i/(NUM_SAMPLES - 1.0) * speed;
-		vec3 p = (FragPos + fragToEye * t);
-
-		if (max(abs(p.x), max(abs(p.y), abs(p.z))) <= 1) { //intersection
-		  
-		  //color = forwardStep(color, tf(p));
-
-		}
-	}
-}	

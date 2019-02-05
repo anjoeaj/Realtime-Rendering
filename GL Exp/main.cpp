@@ -23,10 +23,37 @@
 
 #include <assimp/Importer.hpp>
 
+#include <iostream>
+#include <filesystem>
+namespace fs = std::filesystem;
+
+#include <windows.h>
+
+//the below function gets the working directory
+std::string getexepath()
+{
+	char result[256];
+	return std::string(result, GetModuleFileNameA(NULL, result, 256));
+}
+
+// Use Nvidia graphics card on Windows
+#ifdef _WIN32
+extern "C" {
+	_declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+#endif
+
 const GLint WIDTH = 800, HEIGHT = 600;
 
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
+unsigned int loadCubemap(std::vector<std::string> faces);
+void RenderFloor(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void GetUniformLocations(GLuint &uniformModel, GLuint &uniformProjection, GLuint &uniformView, GLuint &uniformAmbientIntensity, GLuint &uniformAmbientColour, GLuint &uniformDirection, GLuint &uniformDiffuseIntensity, GLuint &uniformEyePosition, GLuint &uniformSpecularIntensity, GLuint &uniformShininess, GLuint &uniformIlluminationType, GLuint &uniformAlbedo, GLuint &uniformRoughness, GLuint &uniformMetallic);
+void SetMaterialProps();
+void SetAnimationParams();
+void RenderHelicopterToon(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 MyGLWindow mainWindow;
 
 Camera camera;
@@ -44,6 +71,9 @@ Material toonMaterial;
 Model copter;
 Model snowTerrain;
 
+Model skyBoxModelImported;
+Model lowPolyBird;
+
 //To control the speed of cam movement
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -53,9 +83,25 @@ bool animToggle = false;
 
 //Vertex Shader
 static const char * vertexShader = "Shaders/shader.vs";
+static const char * skyboxVertexShader = "Shaders/skybox.vs";
 
 //Fragment Shader
 static const char * fragmentShader = "Shaders/shader.fs";
+static const char * skyboxFragmentShader = "Shaders/skybox.fs";
+
+GLuint cubemapTexture;
+
+//Credits - Learnopengl.com
+//Faces for skybox texture
+std::vector<std::string> skyBoxFaces
+{
+	fs::current_path().string() + "\\Textures\\skybox4\\right.jpg",
+	fs::current_path().string() + "\\Textures\\skybox4\\left.jpg",
+	fs::current_path().string() + "\\Textures\\skybox4\\top.jpg",
+	fs::current_path().string() + "\\Textures\\skybox4\\bottom.jpg",
+	fs::current_path().string() + "\\Textures\\skybox4\\front.jpg",
+	fs::current_path().string() + "\\Textures\\skybox4\\back.jpg"
+};
 
 void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
 	unsigned int vLength, unsigned int normalOffset)
@@ -90,6 +136,10 @@ void CreateShaders()
 	Shader *shader1 = new Shader();
 	shader1->CreateFromFiles(vertexShader, fragmentShader);
 	shaderList.push_back(*shader1);
+
+	Shader *shader2 = new Shader();
+	shader2->CreateFromFiles(skyboxVertexShader, skyboxFragmentShader);
+	shaderList.push_back(*shader2);
 }
 
 void CreateObjects() {
@@ -155,6 +205,60 @@ void CreateObjects() {
 	meshList.push_back(obj3);
 }
 
+void CreateSkyBox() {
+
+	//vertices
+	GLfloat skyboxVertices[] = {
+		          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	Mesh *skyBoxObject = new Mesh();
+	skyBoxObject->CreateSkyBoxMesh(skyboxVertices);
+	meshList.push_back(skyBoxObject);
+
+	cubemapTexture = loadCubemap(skyBoxFaces);
+}
 //This function is to apply a scale factor for perspective projection x axis when viewed in split-view
 GLfloat orthoXFactor() {
 	if (mainWindow.ortho) {
@@ -165,69 +269,20 @@ GLfloat orthoXFactor() {
 	}
 }
 
-/*
-glm::mat4 applyTranslation(glm::mat4 model, Axis axis) {
-	switch (axis)
-	{
-	case X:
-		model = glm::translate(model, glm::vec3(triOffset, 0.0f, 0.0f));
-		break;
-	case Y:
-		model = glm::translate(model, glm::vec3(0.0f, triOffset, 0.0f));
-		break;
-	case Z:
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, triOffset));
-		break;
-	case RESET:
-		break;
-	default:
-		break;
-	}
-	
-	return model;
+void RenderFloor(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType)
+{
+	//Floor
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+	dirtTexture.UseTexture();
+	dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	meshList[2]->RenderMesh();
 }
 
-glm::mat4 applyRotation(glm::mat4 model, Axis axis) {
-	switch (axis)
-	{
-	case X:
-		model = glm::rotate(model, 0.65f, glm::vec3(1.0f, 0.0f, 0.0f));
-		break;
-	case Y:
-		model = glm::rotate(model, 0.65f, glm::vec3(0.0f, 1.0f, 0.0f));
-		break;
-	case Z:
-		model = glm::rotate(model, 0.65f, glm::vec3(0.0f, 0.0f, 1.0f));
-		break;
-	case RESET:
-		break;
-	default:
-		break;
-	}
-
-	return model;
-}
-
-glm::mat4 applyScale(glm::mat4 model, Axis axis) {
-	switch (axis)
-	{
-	case X:
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		break;
-	case Y:
-		model = glm::scale(model, glm::vec3(2.0f, 0.5f, 1.0f));
-		break;
-	case Z:
-		break;
-	case RESET:
-		break;
-	default:
-		break;
-	}
-
-	return model;
-}
-*/
 int main() {
 
 	mainWindow = MyGLWindow(1366, 768);
@@ -240,6 +295,7 @@ int main() {
 	//mainWindow1.Initialise();
 	
 	CreateObjects();
+	CreateSkyBox();
 	CreateShaders();
 	
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 2.0f, 0.2f);
@@ -262,7 +318,16 @@ int main() {
 
 	copter.LoadModel("Models/copter.obj");
 
-	
+	skyBoxModelImported = Model();
+	skyBoxModelImported.LoadModel("Models/cube.obj");
+
+	lowPolyBird = Model();
+	//lowPolyBird.LoadModel("Models/teapot.obj");
+	//lowPolyBird.LoadModel("Models/male_head.obj");
+	//lowPolyBird.LoadModel("Models/LowPolyBird.obj");
+	lowPolyBird.LoadModel("Models/copter.obj");
+
+
 	snowTerrain = Model();
 	//snowTerrain.LoadModel("Models/SnowTerrain.obj");
 
@@ -276,6 +341,10 @@ int main() {
 			uniformIlluminationType = 0;
 	
 	GLuint uniformAlbedo = 0, uniformRoughness = 0, uniformMetallic = 0;
+
+	GLuint uniformSkyBox = 0;
+
+
 	
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 	glm::mat4 othoprojection = glm::ortho(-2.2f, 2.2f, -2.2f, 2.2f, 0.1f, 100.0f);
@@ -295,60 +364,18 @@ int main() {
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		//Clear window
-		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		glClearColor(0.1f, 0.5f, 0.5f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderList[0].UseShader();
-		uniformModel = shaderList[0].GetModelLocation();
-		uniformProjection = shaderList[0].GetProjectionLocation();
-		uniformView = shaderList[0].GetViewLocation();
-		uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
-		uniformAmbientColour = shaderList[0].GetAmbientColourLocation();
-		uniformDirection = shaderList[0].GetDirectionLocation();
-		uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
-		uniformEyePosition = shaderList[0].GetEyePositionLocation();
-		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
-		uniformShininess = shaderList[0].GetShininessLocation();
-		uniformIlluminationType = shaderList[0].GetIlluminationTypeLocation();
-
-		//cook torrance params
-		uniformAlbedo = shaderList[0].GetAlbedoLocation();
-		uniformRoughness = shaderList[0].GetRoughnessLocation();
-		uniformMetallic = shaderList[0].GetMetallicLocation();
+		GetUniformLocations(uniformModel, uniformProjection, uniformView, uniformAmbientIntensity, uniformAmbientColour, uniformDirection, uniformDiffuseIntensity, uniformEyePosition, uniformSpecularIntensity, uniformShininess, uniformIlluminationType, uniformAlbedo, uniformRoughness, uniformMetallic);
 
 		mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection);
 		
-		if (mainWindow.updateMaterials) {
-			//call material.update
-			if (mainWindow.boostMaterials) {
-				//increase values
-				shinyMaterial.UpdateMaterial(0.2f, 2, 0);
-				//dullMaterial.UpdateMaterial(0.2f, 2, 0);
-				//toonMaterial.UpdateMaterial(0.2f, 2, 1);
-			}
-			else {
-				//decrease values
-				shinyMaterial.UpdateMaterial(-0.2f, 1/2, 0);
-				
-			}
-			mainWindow.updateMaterials = false;
-		}
+		SetMaterialProps();
 
-		if (mainWindow.animationMode) {
-			if (animationFactor >= 360.0)
-				animationFactor = 0;
-			animationFactor += 0.01;
-
-			if (flipAnimationFactor >= 40.0 || flipAnimationFactor < -40.0)
-				animToggle = !animToggle;
-
-
-			if (animToggle)
-				flipAnimationFactor += 0.01;
-			else
-				flipAnimationFactor -= 0.01;
-		}
-
+		SetAnimationParams();
+		
 		//Handle ortho mode
 		if (mainWindow.ortho) {
 			glViewport(0, 0, mainWindow.getBufferWidth() / 2, mainWindow.getBufferHeight());
@@ -360,213 +387,50 @@ int main() {
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniform3f(uniformEyePosition, camera.getCameraPostion().x, camera.getCameraPostion().y, camera.getCameraPostion().z);
 		
+		
 		//--------------Pyramid-------------------
 			//create identity matrix and use it to translate based on offset value
-			glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 model = glm::mat4(1.0f);
 
-			model = glm::translate(model, glm::vec3(0.0f, -0.3f, 0.0f));
-			model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 0.25f, 0.25f, 0.25f));
-			
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		
+		//shaderList[1].UseShader();
+		//meshList[0]->RenderMesh();
+		RenderHelicopterCookTorrance(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
-			goldTexture.UseTexture();
-			shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			meshList[0]->RenderMesh();
-			
-			//Second transformation matrix for the second triangle
-			//model = glm::mat4(1.0f);
-
-			glm::mat4 rootModel = model;
-			
-
-			//----------------Top Small Pyramid----------------
-			model = glm::translate(rootModel, glm::vec3(0.0f, 1.1f, 0.0f));
-			model = glm::rotate(model, animationFactor*3, glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 0.125f, 0.125f, 0.125f));
-
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-			goldTexture.UseTexture();
-			shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			meshList[1]->RenderMesh();
+		//Second transformation matrix for the second triangle
+		//model = glm::mat4(1.0f);
+		
+		glm::mat4 rootModel = model;
 
 
-			
+		//RenderFloor(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
-			//Floor
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 1.0f, 1.0f, 1.0f));
-
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-			dirtTexture.UseTexture();
-			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			meshList[2]->RenderMesh();
-
-			//Snow terrain
-			/*
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 1.0f, 1.0f, 1.0f));
-
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			meshList[2]->RenderMesh();
-			//snowTerrain.RenderModel();
-			*/
-			
-			//Helicopter
-			model = glm::mat4(1.0f);
-			
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 0.10f, 0.10f, 0.10f));
-			model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
-
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-			//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			//cookTorranceMaterial.UseCookTorranceMaterial(uniformAlbedo, uniformRoughness, uniformMetallic);
-			//meshList[2]->RenderMesh();
-			copter.RenderModel();
+		//RenderHelicopterCookTorrance(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
 
-			//Helicopter 2
-			model = glm::mat4(1.0f);
+		//RenderHelicopterToon(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
-			model = glm::scale(model, glm::vec3(orthoXFactor() * 0.05f, 0.05f, 0.05f));
-			model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 0.5f, 0.0f));
-			model = glm::translate(model, glm::vec3(-15.0f, 0.0f, 0.0f));
+		//SkyBox Render
+		//change depth function so depth test passes when values are equal to depth buffer's content
+		glDepthFunc(GL_LEQUAL);
+		//use skybox shader
+		shaderList[1].UseShader();
+		//convert the existing mat4 view matrix to mat3 and then back to mat4 to remove the translation values
+		glm::mat4 skyBoxViewMat = glm::mat4(glm::mat3(camera.calculateViewMatrix()));
+		
+		//SkyBox uniform location
+		uniformSkyBox = shaderList[1].GetSkyBoxLocation();
+		uniformView = shaderList[1].GetViewLocation();
+		uniformProjection = shaderList[1].GetProjectionLocation();
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(skyBoxViewMat));
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniform1i(uniformSkyBox, 0);
 
-			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-			//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			toonMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
-			//cookTorranceMaterial.UseCookTorranceMaterial(uniformAlbedo, uniformRoughness, uniformMetallic);
-			//meshList[2]->RenderMesh();
-			copter.RenderModel();
-
-			//--------------------//------------/-----////----
-			//--------------------//------------/-----////----
-			//--------------------//------------/-----////----
-			/*
-			if (mainWindow.ortho) {
-				glViewport(mainWindow.getBufferWidth() / 2, 0, mainWindow.getBufferWidth() / 2, mainWindow.getBufferHeight());
-
-
-				//glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(glm::lookAt(
-				//	glm::vec3(-10.0, -6, 40.0), //camera position
-				//	glm::vec3(0.0, 0.0, 0.0), // target
-				//	glm::vec3(0.0, 0.0, -1.0))
-				//));
-
-				glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-				glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(othoprojection));
-				glUniform3f(uniformEyePosition, camera.getCameraPostion().x, camera.getCameraPostion().y, camera.getCameraPostion().z);
-
-
-				//create identity matrix and use it to translate based on offset value
-				model = glm::mat4(1.0f);
-
-				model = glm::translate(model, glm::vec3(0.0f, -0.3f, 0.0f));
-				model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				goldTexture.UseTexture();
-				shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				meshList[0]->RenderMesh();
-
-				//Second transformation matrix for the second triangle
-				//model = glm::mat4(1.0f);
-				rootModel = model;
-				model = glm::translate(rootModel, glm::vec3(-0.7f, 0.0f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				goldTexture.UseTexture();
-				dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				meshList[1]->RenderMesh();
-				//-----------------------------------------
-				model = glm::translate(rootModel, glm::vec3(0.6f, 0.0f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				goldTexture.UseTexture();
-				dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				meshList[1]->RenderMesh();
-
-				//--------------------------------
-				model = glm::translate(rootModel, glm::vec3(0.0f, 1.1f, 0.0f));
-				model = glm::rotate(model, animationFactor, glm::vec3(1.0f, 0.0f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				goldTexture.UseTexture();
-				dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				meshList[1]->RenderMesh();
-
-
-				//---------------------------------
-
-				//--------------------------------
-				model = glm::translate(model, glm::vec3(0.0f, 1.4f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				goldTexture.UseTexture();
-				dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				meshList[1]->RenderMesh();
-
-
-				//---------------------------------
-
-				//Floor
-				//model = glm::mat4(1.0f);
-				//model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-				////model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-				//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				//dirtTexture.UseTexture();
-				//dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				//meshList[2]->RenderMesh();
-
-				//Snow terrain
-				model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-				//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				//meshList[2]->RenderMesh();
-				snowTerrain.RenderModel();
-
-
-				//House
-				model = glm::mat4(1.0f);
-				model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-				model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-
-				glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-				shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-				//meshList[2]->RenderMesh();
-				snowHouse.RenderModel();
-			}
-			*/
-
-
-			glUseProgram(0);
+		skyBoxModelImported.RenderModel();
+		//meshList[3]->RenderSkyBox(cubemapTexture);
+		
+		
+		glUseProgram(0);
 
 		mainWindow.swapBuffers();
 
@@ -574,4 +438,138 @@ int main() {
 
 	return 0;
 
+}
+
+void GetUniformLocations(GLuint &uniformModel, GLuint &uniformProjection, GLuint &uniformView, GLuint &uniformAmbientIntensity, GLuint &uniformAmbientColour, GLuint &uniformDirection, GLuint &uniformDiffuseIntensity, GLuint &uniformEyePosition, GLuint &uniformSpecularIntensity, GLuint &uniformShininess, GLuint &uniformIlluminationType, GLuint &uniformAlbedo, GLuint &uniformRoughness, GLuint &uniformMetallic)
+{
+	uniformModel = shaderList[0].GetModelLocation();
+	uniformProjection = shaderList[0].GetProjectionLocation();
+	uniformView = shaderList[0].GetViewLocation();
+	uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
+	uniformAmbientColour = shaderList[0].GetAmbientColourLocation();
+	uniformDirection = shaderList[0].GetDirectionLocation();
+	uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
+	uniformEyePosition = shaderList[0].GetEyePositionLocation();
+	uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
+	uniformShininess = shaderList[0].GetShininessLocation();
+	uniformIlluminationType = shaderList[0].GetIlluminationTypeLocation();
+
+	//cook torrance params
+	uniformAlbedo = shaderList[0].GetAlbedoLocation();
+	uniformRoughness = shaderList[0].GetRoughnessLocation();
+	uniformMetallic = shaderList[0].GetMetallicLocation();
+}
+
+void SetMaterialProps()
+{
+	if (mainWindow.updateMaterials) {
+		//call material.update
+		if (mainWindow.boostMaterials) {
+			//increase values
+			shinyMaterial.UpdateMaterial(0.2f, 2, 0);
+			//dullMaterial.UpdateMaterial(0.2f, 2, 0);
+			//toonMaterial.UpdateMaterial(0.2f, 2, 1);
+		}
+		else {
+			//decrease values
+			shinyMaterial.UpdateMaterial(-0.2f, 1 / 2, 0);
+
+		}
+		mainWindow.updateMaterials = false;
+	}
+}
+
+void SetAnimationParams()
+{
+	if (mainWindow.animationMode) {
+		if (animationFactor >= 360.0)
+			animationFactor = 0;
+		animationFactor += 0.01;
+
+		if (flipAnimationFactor >= 40.0 || flipAnimationFactor < -40.0)
+			animToggle = !animToggle;
+
+
+		if (animToggle)
+			flipAnimationFactor += 0.01;
+		else
+			flipAnimationFactor -= 0.01;
+	}
+}
+
+void RenderHelicopterToon(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType)
+{
+	//Helicopter 2
+	model = glm::mat4(1.0f);
+
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 0.05f, 0.05f, 0.05f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 0.5f, 0.0f));
+	model = glm::translate(model, glm::vec3(-15.0f, 0.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+	//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	toonMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	//cookTorranceMaterial.UseCookTorranceMaterial(uniformAlbedo, uniformRoughness, uniformMetallic);
+	//meshList[2]->RenderMesh();
+	copter.RenderModel();
+}
+
+void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType)
+{
+	//Helicopter
+	model = glm::mat4(1.0f);
+
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 0.10f, 0.10f, 0.10f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+	//shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+	cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	//cookTorranceMaterial.UseCookTorranceMaterial(uniformAlbedo, uniformRoughness, uniformMetallic);
+	//meshList[2]->RenderMesh();
+	lowPolyBird.RenderModel();
+}
+
+// loads a cubemap texture from 6 individual texture faces
+// order:
+// +X (right)
+// -X (left)
+// +Y (top)
+// -Y (bottom)
+// +Z (front) 
+// -Z (back)
+// -------------------------------------------------------
+
+//Credits - Learnopengl.com
+unsigned int loadCubemap(std::vector<std::string> faces)
+{
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (data)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			stbi_image_free(data);
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(data);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
 }

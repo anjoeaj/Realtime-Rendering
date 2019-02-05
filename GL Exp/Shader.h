@@ -31,6 +31,8 @@ public:
 	GLuint GetRoughnessLocation();
 	GLuint GetMetallicLocation();
 
+	GLuint GetSkyBoxLocation();
+	GLuint GetShaderID();
 	void UseShader();
 	void ClearShader();
 	~Shader();
@@ -41,8 +43,11 @@ private:
 		uniformSpecularIntensity, uniformShininess, uniformIlluminationType;
 
 	GLuint uniformAlbedo, uniformRoughness, uniformMetallic;
+
+	GLuint uniformSkyBox;
 	
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
+	void setUniforms(GLuint shaderID);
 	void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
 };
 

@@ -80,6 +80,11 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 		return;
 	}
 
+	//moved all shader variables location-set function because it was growing too big
+	setUniforms(shaderID);
+}
+
+void Shader::setUniforms(GLuint shaderID) {
 	uniformProjection = glGetUniformLocation(shaderID, "projection");
 	uniformModel = glGetUniformLocation(shaderID, "model");
 	uniformView = glGetUniformLocation(shaderID, "view");
@@ -97,6 +102,9 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 	uniformAlbedo = glGetUniformLocation(shaderID, "material.albedo");
 	uniformRoughness = glGetUniformLocation(shaderID, "material.roughness");
 	uniformMetallic = glGetUniformLocation(shaderID, "material.metallic");
+
+	//skybox uniforms
+	uniformSkyBox = glGetUniformLocation(shaderID, "skybox");
 }
 
 void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
@@ -206,6 +214,16 @@ GLuint Shader::GetRoughnessLocation()
 GLuint Shader::GetMetallicLocation()
 {
 	return uniformMetallic;
+}
+
+GLuint Shader::GetSkyBoxLocation()
+{
+	return uniformSkyBox;
+}
+
+GLuint Shader::GetShaderID()
+{
+	return shaderID;
 }
 
 Shader::~Shader()
