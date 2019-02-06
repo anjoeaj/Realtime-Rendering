@@ -116,7 +116,6 @@ GLfloat MyGLWindow::getYChange()
 
 
 void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	printf("key pressed \n");
 	//Get the context
 	MyGLWindow* theWindow = static_cast<MyGLWindow*>(glfwGetWindowUserPointer(window));
 
@@ -159,7 +158,6 @@ void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int actio
 		if (action == GLFW_RELEASE)
 			return;
 		//toggle cursor visibility
-		printf("C pressed\n");
 		theWindow->toggleShowCursor();
 		theWindow->setCursor(theWindow->getShowCursor(), theWindow->mainWindow);
 	}
