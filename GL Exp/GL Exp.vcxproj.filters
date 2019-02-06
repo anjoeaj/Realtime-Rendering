@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{ad9e39d4-a6ca-4891-9254-24da7ba7e69e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,24 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui_draw.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui_impl_glfw.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui_impl_opengl3.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui_widgets.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ext Libs\IMGUI\imgui_demo.cpp">
+      <Filter>Source Files\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

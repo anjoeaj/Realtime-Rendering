@@ -7,6 +7,7 @@
 class MyGLWindow
 {
 public:
+	GLFWwindow* mainWindow;
 	MyGLWindow();
 	MyGLWindow(GLint windowWidth, GLint windowHeight);
 
@@ -25,10 +26,14 @@ public:
 	bool boostMaterials;
 	bool ortho;
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
+
+	bool getShowCursor();
+	void setCursor(bool showCursor, GLFWwindow* window);
+	void toggleShowCursor();
 	~MyGLWindow();
 
 private:
-	GLFWwindow* mainWindow;
+	
 
 	bool keys[1024];
 
@@ -37,12 +42,13 @@ private:
 	GLfloat xChange; // how much has it changed since last movement?
 	GLfloat yChange;
 	bool mouseFirstMoved;
-
+	bool showCursor = true;
 	
 
 	GLint width, height;
 	GLint bufferWidth, bufferHeight;
 	void createCallbacks();
+
 	static void keyPressed(GLFWwindow* window, int key, int code, int action, int mode);
 	static void handleMouse(GLFWwindow* window, double xPos, double yPos);
 

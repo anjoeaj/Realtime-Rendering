@@ -82,7 +82,11 @@ int MyGLWindow::Initialise() {
 	createCallbacks();
 
 	//This is for the cursor to disappear.
-	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	if(getShowCursor())
+		glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	else {
+		glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
 
 	//this is for the user input to identify the calling class
 	glfwSetWindowUserPointer(mainWindow, this); 
@@ -93,6 +97,7 @@ void MyGLWindow::createCallbacks()
 	glfwSetKeyCallback(mainWindow, keyPressed);
 	glfwSetCursorPosCallback(mainWindow, handleMouse);
 }
+
 
 GLfloat MyGLWindow::getXChange()
 {
@@ -111,7 +116,7 @@ GLfloat MyGLWindow::getYChange()
 
 
 void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int action, int mods) {
-
+	printf("key pressed \n");
 	//Get the context
 	MyGLWindow* theWindow = static_cast<MyGLWindow*>(glfwGetWindowUserPointer(window));
 
@@ -150,6 +155,14 @@ void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int actio
 		theWindow->updateMaterials = true;
 		theWindow->boostMaterials = true;
 	}
+	else if (key == GLFW_KEY_C) {
+		if (action == GLFW_RELEASE)
+			return;
+		//toggle cursor visibility
+		printf("C pressed\n");
+		theWindow->toggleShowCursor();
+		theWindow->setCursor(theWindow->getShowCursor(), theWindow->mainWindow);
+	}
 
 
 	if (key >= 0 && key < 1024)
@@ -164,6 +177,14 @@ void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int actio
 		}
 	}
 
+}
+
+void MyGLWindow::setCursor(bool showCursor, GLFWwindow* window) {
+	if (showCursor)
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	else {
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
 }
 
 void MyGLWindow::handleMouse(GLFWwindow* window, double xPos, double yPos) {
@@ -186,6 +207,17 @@ void MyGLWindow::handleMouse(GLFWwindow* window, double xPos, double yPos) {
 
 }
 
+
+bool MyGLWindow::getShowCursor()
+{
+	return showCursor;
+}
+
+
+void MyGLWindow::toggleShowCursor()
+{
+	showCursor = !showCursor;
+}
 
 MyGLWindow::~MyGLWindow()
 {

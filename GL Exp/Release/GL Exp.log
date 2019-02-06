@@ -1,1 +1,50 @@
-﻿
+﻿  Camera.cpp
+  Light.cpp
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(25): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(26): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(28): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(29): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+  main.cpp
+c:\program files (x86)\windows kits\10\include\10.0.17134.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  d:\learning\opengl refactor\realtime rendering\ext libs\glfw\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(319): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(409): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(428): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(539): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(546): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(548): warning C4305: '-=': truncation from 'double' to 'GLfloat'
+  Material.cpp
+  Mesh.cpp
+  Model.cpp
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(29): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(108): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+  MyGLWindow.cpp
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(176): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(177): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(181): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(182): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(185): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(186): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  Shader.cpp
+  Texture.cpp
+     Creating library D:\Learning\OpenGL refactor\Realtime Rendering\Release\Realtime Rendering.lib and object D:\Learning\OpenGL refactor\Realtime Rendering\Release\Realtime Rendering.exp
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui_ImplGlfw_InitForOpenGL(struct GLFWwindow *,bool)" (?ImGui_ImplGlfw_InitForOpenGL@@YA_NPAUGLFWwindow@@_N@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui_ImplOpenGL3_RenderDrawData(struct ImDrawData *)" (?ImGui_ImplOpenGL3_RenderDrawData@@YAXPAUImDrawData@@@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui_ImplGlfw_Shutdown(void)" (?ImGui_ImplGlfw_Shutdown@@YAXXZ)
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui::ColorEdit3(char const *,float * const,int)" (?ColorEdit3@ImGui@@YA_NPBDQAMH@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::End(void)" (?End@ImGui@@YAXXZ)
+main.obj : error LNK2001: unresolved external symbol "struct ImGuiIO & __cdecl ImGui::GetIO(void)" (?GetIO@ImGui@@YAAAUImGuiIO@@XZ)
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui::Checkbox(char const *,bool *)" (?Checkbox@ImGui@@YA_NPBDPA_N@Z)
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui::SliderFloat(char const *,float *,float,float,char const *,float)" (?SliderFloat@ImGui@@YA_NPBDPAMMM0M@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::StyleColorsDark(struct ImGuiStyle *)" (?StyleColorsDark@ImGui@@YAXPAUImGuiStyle@@@Z)
+main.obj : error LNK2001: unresolved external symbol "struct ImDrawData * __cdecl ImGui::GetDrawData(void)" (?GetDrawData@ImGui@@YAPAUImDrawData@@XZ)
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui::Button(char const *,struct ImVec2 const &)" (?Button@ImGui@@YA_NPBDABUImVec2@@@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::SameLine(float,float)" (?SameLine@ImGui@@YAXMM@Z)
+main.obj : error LNK2001: unresolved external symbol "struct ImGuiContext * __cdecl ImGui::CreateContext(struct ImFontAtlas *)" (?CreateContext@ImGui@@YAPAUImGuiContext@@PAUImFontAtlas@@@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::ShowDemoWindow(bool *)" (?ShowDemoWindow@ImGui@@YAXPA_N@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::Render(void)" (?Render@ImGui@@YAXXZ)
+main.obj : error LNK2001: unresolved external symbol "bool __cdecl ImGui::Begin(char const *,bool *,int)" (?Begin@ImGui@@YA_NPBDPA_NH@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::DestroyContext(struct ImGuiContext *)" (?DestroyContext@ImGui@@YAXPAUImGuiContext@@@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl ImGui::Text(char const *,...)" (?Text@ImGui@@YAXPBDZZ)
+D:\Learning\OpenGL refactor\Realtime Rendering\Release\Realtime Rendering.exe : fatal error LNK1120: 19 unresolved externals
