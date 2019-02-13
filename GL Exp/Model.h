@@ -19,6 +19,8 @@ public:
 	void RenderModel();
 	void ClearModel();
 
+	GLfloat normalIntensity = 0;
+
 	~Model();
 
 private:

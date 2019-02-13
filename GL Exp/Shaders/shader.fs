@@ -3,6 +3,14 @@
 in vec4 vCol;
 in vec2 TexCoord;
 in vec3 Normal;
+in BumpMapTangents {
+    mat3 TBNmat;
+    vec3 TangentFragPos;
+	vec3 T;
+	vec3 B;
+	vec3 N;
+} bumpMapTangents;
+
 
 struct DirectionalLight 
 {
@@ -11,6 +19,14 @@ struct DirectionalLight
 	vec3 direction;
 	float diffuseIntensity;
 };
+
+struct PointLight
+{
+	vec3 position;
+	float constant;
+    float linear;
+    float quadratic;
+} pointLight;
 
 struct Material
 {
@@ -23,20 +39,40 @@ struct Material
 	int illuminationType;
 };
 
+
+
 in vec3 FragPos;
 
 out vec4 colour;
 
 uniform vec3 eyePosition;
+uniform vec3 pointLightPosition;
 uniform samplerCube skybox;
-
+uniform int textureMapType;
 
 uniform sampler2D theTexture;
+uniform sampler2D textureNormal;
+
 uniform DirectionalLight directionalLight;
 uniform Material material;
 
+vec3 newNormal = Normal;
+
+uniform float normalMappingIntensity;
+float attenuation;
+
 const vec3 color_specular = vec3 (1.0, 1.0, 1.0);
 
+void SetPointLightProperties(){
+	//pointLight.position = vec3(5.0,5.0,5.0);
+	pointLight.constant = 1.0f;
+	pointLight.linear = 0.07f;
+	pointLight.quadratic = 0.017f;
+
+	float distance    = length(pointLightPosition - FragPos);
+	attenuation = 1.0 / (pointLight.constant + pointLight.linear * distance + 
+    		    pointLight.quadratic * (distance * distance));  
+}
 
 float FindDistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -137,10 +173,41 @@ vec4 cookTorrance(){
 	return calculateCookTorranceIllumination();
 }
 
+vec4 pointLightShading(){
+	// ambient
+    vec3 ambient = directionalLight.colour * directionalLight.ambientIntensity;//* texture(material.diffuse, TexCoords).rgb;
+  	
+    // diffuse 
+    //vec3 norm = normalize(Normal);
+	vec3 norm = normalize(newNormal);
+    vec3 lightDir = normalize(pointLightPosition - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = directionalLight.colour * directionalLight.diffuseIntensity * diff ;//* texture(material.diffuse, TexCoords).rgb;  
+    
+    // specular
+    vec3 viewDir = normalize(eyePosition - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = directionalLight.colour * material.specularIntensity * spec ;//* texture(material.specular, TexCoords).rgb;  
+    
+    // attenuation
+    float distance    = length(pointLightPosition - FragPos);
+    float attenuation = 1.0 / (pointLight.constant + pointLight.linear * distance + pointLight.quadratic * (distance * distance));    
+
+    ambient  *= attenuation;  
+    diffuse   *= attenuation;
+    specular *= attenuation;   
+        
+    vec3 result = ambient + diffuse + specular;
+    return vec4(texture(theTexture, TexCoord).rgb * result, 1.0);
+	
+}
+
 vec4 Phong(){
+	
 	vec4 ambientColour = vec4(directionalLight.colour, 1.0f) * directionalLight.ambientIntensity;
 	
-	float diffuseFactor = max(dot(normalize(Normal), normalize(directionalLight.direction)), 0.0f);
+	float diffuseFactor = max(dot(normalize(newNormal), normalize(directionalLight.direction)), 0.0f);
 	vec4 diffuseColour = vec4(directionalLight.colour, 1.0f) * directionalLight.diffuseIntensity * diffuseFactor;
 	
 	vec4 specularColour = vec4(0, 0, 0, 0);
@@ -148,7 +215,7 @@ vec4 Phong(){
 	if(diffuseFactor > 0.0f)
 	{
 		fragToEye = normalize(eyePosition - FragPos);
-		vec3 reflectedVertex = normalize(reflect(directionalLight.direction, normalize(Normal)));
+		vec3 reflectedVertex = normalize(reflect(directionalLight.direction, normalize(newNormal)));
 		
 		float specularFactor = dot(fragToEye, reflectedVertex);
 		if(specularFactor > 0.0f)
@@ -158,7 +225,74 @@ vec4 Phong(){
 		}
 	}
 	
-	return texture(theTexture, TexCoord) * (ambientColour + diffuseColour + specularColour);
+	//diffuse color and real texture
+	vec3 mainTex = texture(theTexture, TexCoord).rgb;
+	
+	//calculate an ambient Colour
+	vec3 mainTexModified = normalMappingIntensity * mainTex;
+	
+	//apply point light
+	ambientColour  *= attenuation; 
+	diffuseColour  *= attenuation;
+	specularColour *= attenuation; 
+	
+	return vec4(mainTexModified, 1.0) * (ambientColour + diffuseColour + specularColour);
+}
+
+void alterNormals(){
+	
+	newNormal = texture(textureNormal, TexCoord).rgb;
+	
+	//-1 to 1 range // tangent space
+	newNormal = normalize(newNormal * 2.0 - 1.0);
+	
+	newNormal = normalize(bumpMapTangents.TBNmat * newNormal);
+	
+}
+
+vec4 normalMapping(){
+	//now get the normals from the new texture
+	vec3 newNormal = texture(textureNormal, TexCoord).rgb;
+	
+	//-1 to 1 range // tangent space
+	newNormal = normalize(newNormal * 2.0 - 1.0);
+	
+	newNormal = normalize(bumpMapTangents.TBNmat * newNormal);
+	
+
+	
+	//diffuse color and real texture
+	vec3 diffuseColor = texture(theTexture, TexCoord).rgb;
+	
+	//calculate an ambient Colour
+	vec3 ambient = normalMappingIntensity * diffuseColor;
+	
+	vec3 tangentLightPos =  directionalLight.direction;//vec3(10.0,10.0,10.0);
+	
+	vec3 tangentFragPos =  bumpMapTangents.TangentFragPos;
+	
+	vec3 lightDir = normalize(tangentLightPos - tangentFragPos);
+	lightDir = bumpMapTangents.TBNmat * lightDir;
+	float diff = max(dot(lightDir, newNormal), 0.0);
+	vec3 diffuse = diff * diffuseColor;
+	
+	vec3 TangentViewPos = eyePosition;
+	
+	vec3 viewDir = normalize(TangentViewPos - tangentFragPos);
+	viewDir = bumpMapTangents.TBNmat * viewDir;
+    vec3 reflectDir = reflect(-lightDir, newNormal);
+    vec3 halfwayDir = normalize(newNormal + viewDir);  
+    float spec = pow(max(dot(newNormal, halfwayDir), 0.0), 32.0);
+
+    vec3 specular = vec3(0.5) * spec;
+	
+	//return vec4 (bumpMapTangents.T, 1.0f);
+	return vec4(ambient + diffuse + specular, 1.0);
+	
+}
+
+vec4 sinusoidalBumpMapping(){
+		return vec4(0.0f);
 }
 
 vec4 Toon(){
@@ -203,6 +337,17 @@ void main()
 {
 	//printf("Illum type is %d", material.illuminationType);
 	//colour = Phong();
+	SetPointLightProperties();
+	if(textureMapType == 1){
+		alterNormals();
+		//colour = normalMapping();
+		//colour = Phong();
+		colour = pointLightShading();
+		//colour = vec4 (bumpMapTangents.T, 1.0f);
+	}else {
+		colour = pointLightShading();
+	}
+		
 	/*
 	if(material.illuminationType == 0)
 		colour = Phong();
@@ -212,6 +357,7 @@ void main()
 		colour = cookTorrance();
 	*/
 	
+	/*
 	//Reflectance starts
 	vec3 ViewDir = normalize(FragPos - eyePosition);
 	vec3 HalfVec = normalize(ViewDir - directionalLight.direction);

@@ -32,7 +32,12 @@ public:
 	GLuint GetMetallicLocation();
 
 	GLuint GetSkyBoxLocation();
+	GLuint GetTextureNormalLocation();
+	GLuint GetNormalMappingIntensityLocation();
+	GLuint GetTextureLocation();
+	GLuint GetTextureMapTypeLocation();
 	GLuint GetShaderID();
+	GLuint GetPointLightPositionLocation();
 	void UseShader();
 	void ClearShader();
 	~Shader();
@@ -40,11 +45,13 @@ public:
 private:
 	GLuint shaderID, uniformProjection, uniformModel, uniformView, uniformEyePosition,
 		uniformAmbientIntensity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection,
-		uniformSpecularIntensity, uniformShininess, uniformIlluminationType;
+		uniformSpecularIntensity, uniformShininess, uniformIlluminationType, uniformPointLightPosition;
 
 	GLuint uniformAlbedo, uniformRoughness, uniformMetallic;
 
 	GLuint uniformSkyBox;
+
+	GLuint uniformTextureNormal, uniformTexture, uniformTextureMapType, uniformNormalMappingIntensity;
 	
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	void setUniforms(GLuint shaderID);

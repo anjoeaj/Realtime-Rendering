@@ -27,9 +27,12 @@ public:
 	bool ortho;
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
 
+	bool flyThrough = true;
+
 	bool getShowCursor();
 	void setCursor(bool showCursor, GLFWwindow* window);
 	void toggleShowCursor();
+	void toggleFlyThrough();
 	~MyGLWindow();
 
 private:

@@ -105,6 +105,13 @@ void Shader::setUniforms(GLuint shaderID) {
 
 	//skybox uniforms
 	uniformSkyBox = glGetUniformLocation(shaderID, "skybox");
+
+	//texture normals
+	uniformTextureNormal = glGetUniformLocation(shaderID, "textureNormal");
+	uniformTextureMapType = glGetUniformLocation(shaderID, "textureMapType");
+	uniformNormalMappingIntensity = glGetUniformLocation(shaderID, "normalMappingIntensity");
+
+	uniformPointLightPosition = glGetUniformLocation(shaderID, "pointLightPosition");
 }
 
 void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
@@ -220,6 +227,31 @@ GLuint Shader::GetSkyBoxLocation()
 {
 	return uniformSkyBox;
 }
+
+GLuint Shader::GetTextureNormalLocation()
+{
+	return uniformTextureNormal;
+}
+
+GLuint Shader::GetNormalMappingIntensityLocation()
+{
+	return uniformNormalMappingIntensity;
+}
+
+GLuint Shader::GetTextureLocation()
+{
+	return uniformTexture;
+}
+
+GLuint Shader::GetTextureMapTypeLocation()
+{
+	return uniformTextureMapType;
+}
+GLuint Shader::GetPointLightPositionLocation()
+{
+	return uniformPointLightPosition;
+}
+
 
 GLuint Shader::GetShaderID()
 {

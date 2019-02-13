@@ -161,6 +161,12 @@ void MyGLWindow::keyPressed(GLFWwindow* window, int key, int scancode, int actio
 		theWindow->toggleShowCursor();
 		theWindow->setCursor(theWindow->getShowCursor(), theWindow->mainWindow);
 	}
+	else if (key == GLFW_KEY_F) {
+		if (action == GLFW_RELEASE)
+			return;
+		//toggle flythorugh
+		theWindow->toggleFlyThrough();
+	}
 
 
 	if (key >= 0 && key < 1024)
@@ -216,6 +222,12 @@ void MyGLWindow::toggleShowCursor()
 {
 	showCursor = !showCursor;
 }
+
+void MyGLWindow::toggleFlyThrough()
+{
+	flyThrough = !flyThrough;
+}
+
 
 MyGLWindow::~MyGLWindow()
 {

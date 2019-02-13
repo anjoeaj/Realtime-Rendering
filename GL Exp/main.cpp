@@ -60,6 +60,8 @@ void SetMaterialProps();
 void SetAnimationParams();
 void RenderHelicopterToon(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void RenderEarth(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void RenderCube(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 MyGLWindow mainWindow;
 
 Camera camera;
@@ -75,10 +77,11 @@ Material cookTorranceMaterial;
 Material toonMaterial;
 
 Model copter;
-Model snowTerrain;
+Model cube;
 
 Model skyBoxModelImported;
 Model lowPolyBird;
+Model earthModel;
 
 //To control the speed of cam movement
 GLfloat deltaTime = 0.0f;
@@ -101,12 +104,12 @@ GLuint cubemapTexture;
 //Faces for skybox texture
 std::vector<std::string> skyBoxFaces
 {
-	fs::current_path().string() + "\\Textures\\skybox4\\right.jpg",
-	fs::current_path().string() + "\\Textures\\skybox4\\left.jpg",
-	fs::current_path().string() + "\\Textures\\skybox4\\top.jpg",
-	fs::current_path().string() + "\\Textures\\skybox4\\bottom.jpg",
-	fs::current_path().string() + "\\Textures\\skybox4\\front.jpg",
-	fs::current_path().string() + "\\Textures\\skybox4\\back.jpg"
+	fs::current_path().string() + "\\Textures\\skybox5\\right.jpg",
+	fs::current_path().string() + "\\Textures\\skybox5\\left.jpg",
+	fs::current_path().string() + "\\Textures\\skybox5\\top.jpg",
+	fs::current_path().string() + "\\Textures\\skybox5\\bottom.jpg",
+	fs::current_path().string() + "\\Textures\\skybox5\\front.jpg",
+	fs::current_path().string() + "\\Textures\\skybox5\\back.jpg"
 };
 
 void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
@@ -159,7 +162,7 @@ void CreateObjects() {
 
 	GLfloat vertices[] = {
 		//	x      y      z			u	  v			nx	  ny    nz
-			-1.0f, -1.0f, -0.6f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+			-1.0f, -1.0f, -0.6f,	0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
 			0.0f, -1.0f, 1.0f,		0.5f, 0.0f,		0.0f, 0.0f, 0.0f,
 			1.0f, -1.0f, -0.6f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f,		0.5f, 1.0f,		0.0f, 0.0f, 0.0f
@@ -304,7 +307,7 @@ int main() {
 	CreateSkyBox();
 	CreateShaders();
 	
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 2.0f, 0.2f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 90.0f, 0.0f, 2.0f, 0.1f);
 
 	goldTexture = Texture((char *)"Textures/gold.png");
 	goldTexture.LoadTextureA();
@@ -319,45 +322,54 @@ int main() {
 	cookTorranceMaterial = Material(1.0f, 32, 2);
 	cookTorranceMaterial.SetCookTorranceParams(glm::vec3(1.0f, 1.0f, 1.0f), 0.8, 0.2);
 
-	copter = Model();
+	//copter = Model();
 	//snowHouse.LoadModel("Models/Snow covered CottageOBJ.obj");
 
-	copter.LoadModel("Models/copter.obj");
+	//copter.LoadModel("Models/copter.obj");
 
 	skyBoxModelImported = Model();
 	skyBoxModelImported.LoadModel("Models/cube.obj");
 
-	lowPolyBird = Model();
+	//lowPolyBird = Model();
 	//lowPolyBird.LoadModel("Models/teapot.obj");
 	//lowPolyBird.LoadModel("Models/male_head.obj");
 	//lowPolyBird.LoadModel("Models/LowPolyBird.obj");
-	lowPolyBird.LoadModel("Models/copter.obj");
+	//lowPolyBird.LoadModel("Models/copter_straight.obj");
+
+	earthModel = Model();
+	earthModel.LoadModel("Models/earth.obj");
+	earthModel.normalIntensity = 0.6;
 
 
-	snowTerrain = Model();
-	//snowTerrain.LoadModel("Models/SnowTerrain.obj");
+	cube = Model();
+	cube.LoadModel("Models/sCube.obj");
+	cube.normalIntensity = 0.6;
 
-	mainLight = Light(1.0f,1.0f,1.0f,0.7f, //color and intensity of the light
-				2.0f, -1.0f, -2.0f, 0.4f);// direction and intensity of the light
+	mainLight = Light(1.0f,1.0f,1.0f,1.0f, //color and intensity of the ambient light
+				2.0f, -1.0f, -2.0f, 0.3f);// direction and intensity of diffuse light
 	
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
-			uniformAmbientIntensity = 0, uniformAmbientColour = 0,
-			uniformDirection = 0, uniformDiffuseIntensity = 0,
-			uniformSpecularIntensity = 0, uniformShininess = 0,
-			uniformIlluminationType = 0;
+		uniformAmbientIntensity = 0, uniformAmbientColour = 0,
+		uniformDirection = 0, uniformDiffuseIntensity = 0,
+		uniformSpecularIntensity = 0, uniformShininess = 0,
+		uniformIlluminationType = 0, uniformPointLightPosition = 0;
 	
 	GLuint uniformAlbedo = 0, uniformRoughness = 0, uniformMetallic = 0;
 
 	GLuint uniformSkyBox = 0;
 
-
+	GLuint uniformTextureNormal = 0, uniformTexture = 0, uniformTextureMapType = 0, uniformNormalMappingIntensity = 0;
 	
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 	glm::mat4 othoprojection = glm::ortho(-2.2f, 2.2f, -2.2f, 2.2f, 0.1f, 100.0f);
 
 	Assimp::Importer importer = Assimp::Importer();
 
-	bool flyThrough = false;
+	bool flyThrough = true;
+	bool normalMapping = false;
+
+	glm::vec3 lightPosition(10.0, 10.0, 10.0);
+	
 
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(mainWindow.mainWindow, true);
@@ -385,20 +397,29 @@ int main() {
 			static float f = 0.0f;
 			static int counter = 0;
 
-			ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+			ImGui::Begin("Normal Mapping");                          // Create a window called "Hello, world!" and append into it.
 
 			ImGui::Text("Press C to toggle mouse cursor visibility");               // Display some text (you can use a format strings too)
-			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-			ImGui::Checkbox("Another Window", &show_another_window);
-			ImGui::Checkbox("Enable flythrough", &flyThrough);
+			//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+			//ImGui::Checkbox("Another Window", &show_another_window);
+			//ImGui::SliderFloat3("Light position", &lightPosition, 0.0f, 1.0f);
+			ImGui::Text("Point light");
+			/*ImGui::SliderFloat("Linear", &lightPosition.x, 0.0f, 0.2f);
+			ImGui::SliderFloat("Quadratic", &lightPosition.y, 0.0f, 0.07f);
+			ImGui::SliderFloat("Light position Z", &lightPosition.z, 0.0f, 1.0f);*/
+			ImGui::SliderFloat("Light position X", &lightPosition.x, -10.0f, 10.2f);
+			ImGui::SliderFloat("Light position Y", &lightPosition.y, -10.0f, 10.07f);
+			ImGui::SliderFloat("Light position Z", &lightPosition.z, -10.0f, 11.0f);
+			ImGui::Checkbox("Enable flythrough (Press F to toggle)", &mainWindow.flyThrough);
+			ImGui::Checkbox("Enable Normal Mapping", &normalMapping);
 
-			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+			//ImGui::SliderFloat("Normal map intensity", &earthModel.normalIntensity, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+			//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				counter++;
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
+			//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			//	counter++;
+			//ImGui::SameLine();
+			//ImGui::Text("counter = %d", counter);
 
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			ImGui::End();
@@ -422,7 +443,7 @@ int main() {
 		//Handle user input events
 		glfwPollEvents();
 		
-		if (flyThrough) {
+		if (mainWindow.flyThrough) {
 			camera.keyControl(mainWindow.getsKeys(), deltaTime);
 			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 		}
@@ -452,14 +473,36 @@ int main() {
 		else {
 			glViewport(0, 0, mainWindow.getBufferWidth(), mainWindow.getBufferHeight());
 		}
+
+		//glUniform3f(uniformDirection, animationFactor, animationFactor, animationFactor);
+
+		uniformTextureMapType = shaderList[0].GetTextureMapTypeLocation();
+		if (normalMapping) {
+			//mode normal mapping ON
+			//send to fragment shader
+			
+			glUniform1i(uniformTextureMapType, 1);
+		}
+		else {
+			glUniform1i(uniformTextureMapType, 2);
+		}
+		uniformPointLightPosition = shaderList[0].GetPointLightPositionLocation();
+		uniformTexture = shaderList[0].GetTextureLocation();
+		uniformTextureNormal = shaderList[0].GetTextureNormalLocation();
+		uniformNormalMappingIntensity = shaderList[0].GetNormalMappingIntensityLocation();
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniform3f(uniformEyePosition, camera.getCameraPostion().x, camera.getCameraPostion().y, camera.getCameraPostion().z);
-		
+		glUniform3f(uniformPointLightPosition, lightPosition.x, lightPosition.y, lightPosition.z);
+		glUniform1i(uniformTexture, 0);
+		glUniform1i(uniformTextureNormal, 1);
+		glUniform1f(uniformNormalMappingIntensity, earthModel.normalIntensity);
+
 		
 		glm::mat4 model = glm::mat4(1.0f);
 
-		RenderHelicopterCookTorrance(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+		RenderEarth(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+		//RenderCube(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
 		//RenderFloor(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
@@ -548,7 +591,7 @@ void SetAnimationParams()
 	if (mainWindow.animationMode) {
 		if (animationFactor >= 360.0)
 			animationFactor = 0;
-		animationFactor += 0.01;
+		animationFactor += 0.001;
 
 		if (flipAnimationFactor >= 40.0 || flipAnimationFactor < -40.0)
 			animToggle = !animToggle;
@@ -584,7 +627,7 @@ void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, 
 	//Helicopter
 	model = glm::mat4(1.0f);
 
-	model = glm::scale(model, glm::vec3(orthoXFactor() * 0.10f, 0.10f, 0.10f));
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 0.01f, 0.01f, 0.01f));
 	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
 	//model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
 
@@ -595,6 +638,34 @@ void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, 
 	//cookTorranceMaterial.UseCookTorranceMaterial(uniformAlbedo, uniformRoughness, uniformMetallic);
 	//meshList[2]->RenderMesh();
 	lowPolyBird.RenderModel();
+}
+
+void RenderEarth(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType) {
+
+	model = glm::mat4(1.0f);
+
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 0.01f, 0.01f, 0.01f));
+	//model = glm::scale(model, glm::vec3(orthoXFactor() * 1.001f, 1.001f, 1.001f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	earthModel.RenderModel();
+}
+
+void RenderCube(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType) {
+
+	model = glm::mat4(1.0f);
+
+	//model = glm::scale(model, glm::vec3(orthoXFactor() * 0.01f, 0.01f, 0.01f));
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 1.001f, 1.001f, 1.001f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	cube.RenderModel();
 }
 
 // loads a cubemap texture from 6 individual texture faces

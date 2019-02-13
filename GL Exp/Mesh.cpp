@@ -27,14 +27,27 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int num
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
+	//vertices
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 14, 0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, /*offset of texture-> */(void*) (sizeof(vertices[0]) * 3));
+	//texture
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 14, /*offset of texture-> */(void*) (sizeof(vertices[0]) * 3));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, /*offset of normals -> */(void*)(sizeof(vertices[0]) * 5));
+	//normals
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 14, /*offset of normals -> */(void*)(sizeof(vertices[0]) * 5));
 	glEnableVertexAttribArray(2);
+
+	//when adding tangents and bitangents, modify the offset values, and also total size
+	//in this case, 8 + 3 (tangent) + 3 (bitangent) = 14
+	//tangents
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 14, /*offset of tangents -> */(void*)(sizeof(vertices[0]) * 8));
+	glEnableVertexAttribArray(3);
+
+	//bitangents
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 14, /*offset of bitangents -> */(void*)(sizeof(vertices[0]) * 11));
+	glEnableVertexAttribArray(4);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

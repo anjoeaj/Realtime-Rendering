@@ -1,36 +1,131 @@
-﻿  Camera.cpp
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (GL Exp.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_widgets.cpp
+  Camera.cpp
   Light.cpp
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(25): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(26): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(28): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\light.cpp(29): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(25): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(26): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(28): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\light.cpp(29): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
   main.cpp
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(81): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(258): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(287): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(319): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(340): warning C4305: '+=': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(347): warning C4305: '+=': truncation from 'double' to 'GLfloat'
-d:\learning\opengl refactor\rtr\gl exp\main.cpp(349): warning C4305: '-=': truncation from 'double' to 'GLfloat'
+c:\program files (x86)\windows kits\10\include\10.0.17134.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  d:\learning\opengl refactor\realtime rendering\ext libs\glfw\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(133): warning C4267: 'initializing': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(320): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(419): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(441): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(552): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(559): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(561): warning C4305: '-=': truncation from 'double' to 'GLfloat'
   Material.cpp
   Mesh.cpp
   Model.cpp
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(29): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(79): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(99): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\model.cpp(108): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(29): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(132): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(161): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\model.cpp(170): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
   MyGLWindow.cpp
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(175): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(176): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(180): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(181): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(184): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(185): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(194): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(195): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(199): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(200): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(203): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(204): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
   Shader.cpp
-d:\learning\opengl refactor\rtr\gl exp\shader.cpp(110): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\shader.cpp(121): warning C4267: '=': conversion from 'size_t' to 'GLint', possible loss of data
   Texture.cpp
   Generating Code...
-d:\learning\opengl refactor\rtr\gl exp\myglwindow.cpp(89): warning C4715: 'MyGLWindow::Initialise': not all control paths return a value
+d:\learning\opengl refactor\realtime rendering\gl exp\myglwindow.cpp(93): warning C4715: 'MyGLWindow::Initialise': not all control paths return a value
+     Creating library D:\Learning\OpenGL refactor\Realtime Rendering\x64\Debug\Realtime Rendering.lib and object D:\Learning\OpenGL refactor\Realtime Rendering\x64\Debug\Realtime Rendering.exp
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetWindowSize referenced in function "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetFramebufferSize referenced in function "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+MyGLWindow.obj : error LNK2001: unresolved external symbol glfwGetFramebufferSize
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetWindowAttrib referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMousePosAndButtons(void)" (?ImGui_ImplGlfw_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetInputMode referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMouseCursor(void)" (?ImGui_ImplGlfw_UpdateMouseCursor@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetInputMode referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMouseCursor(void)" (?ImGui_ImplGlfw_UpdateMouseCursor@@YAXXZ)
+MyGLWindow.obj : error LNK2001: unresolved external symbol glfwSetInputMode
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetMouseButton referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMousePosAndButtons(void)" (?ImGui_ImplGlfw_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetCursorPos referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMousePosAndButtons(void)" (?ImGui_ImplGlfw_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetCursorPos referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMousePosAndButtons(void)" (?ImGui_ImplGlfw_UpdateMousePosAndButtons@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwCreateStandardCursor referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwDestroyCursor referenced in function "void __cdecl ImGui_ImplGlfw_Shutdown(void)" (?ImGui_ImplGlfw_Shutdown@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetCursor referenced in function "void __cdecl ImGui_ImplGlfw_UpdateMouseCursor(void)" (?ImGui_ImplGlfw_UpdateMouseCursor@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetKeyCallback referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+MyGLWindow.obj : error LNK2001: unresolved external symbol glfwSetKeyCallback
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetCharCallback referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetMouseButtonCallback referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetScrollCallback referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetJoystickAxes referenced in function "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetJoystickButtons referenced in function "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwSetClipboardString referenced in function "void __cdecl ImGui_ImplGlfw_SetClipboardText(void *,char const *)" (?ImGui_ImplGlfw_SetClipboardText@@YAXPEAXPEBD@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetClipboardString referenced in function "char const * __cdecl ImGui_ImplGlfw_GetClipboardText(void *)" (?ImGui_ImplGlfw_GetClipboardText@@YAPEBDPEAX@Z)
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function "void __cdecl ImGui_ImplGlfw_NewFrame(void)" (?ImGui_ImplGlfw_NewFrame@@YAXXZ)
+main.obj : error LNK2001: unresolved external symbol glfwGetTime
+imgui_impl_glfw.obj : error LNK2019: unresolved external symbol glfwGetWin32Window referenced in function "bool __cdecl ImGui_ImplGlfw_Init(struct GLFWwindow *,bool,enum GlfwClientApi)" (?ImGui_ImplGlfw_Init@@YA_NPEAUGLFWwindow@@_NW4GlfwClientApi@@@Z)
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewActiveTexture
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewActiveTexture
+Texture.obj : error LNK2001: unresolved external symbol __imp___glewActiveTexture
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBlendEquation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBlendFuncSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBlendEquationSeparate
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewDeleteProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewDeleteProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewDeleteShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewDetachShader
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetAttribLocation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGetUniformLocation
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetUniformLocation
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewUniform1i
+main.obj : error LNK2001: unresolved external symbol __imp___glewUniform1i
+Material.obj : error LNK2001: unresolved external symbol __imp___glewUniform1i
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewUniformMatrix4fv
+main.obj : error LNK2001: unresolved external symbol __imp___glewUniformMatrix4fv
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+main.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+Shader.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBindSampler
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewDeleteVertexArrays
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteVertexArrays
+imgui_impl_opengl3.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
 Light.obj : error LNK2001: unresolved external symbol __imp___glewUniform1f
 Material.obj : error LNK2001: unresolved external symbol __imp___glewUniform1f
 Light.obj : error LNK2001: unresolved external symbol __imp___glewUniform3f
@@ -38,28 +133,13 @@ main.obj : error LNK2001: unresolved external symbol __imp___glewUniform3f
 Material.obj : error LNK2001: unresolved external symbol __imp___glewUniform3f
 main.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function "public: bool __cdecl MyGLWindow::getShouldClose(void)" (?getShouldClose@MyGLWindow@@QEAA_NXZ)
 main.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
-main.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function main
 main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function "public: void __cdecl MyGLWindow::swapBuffers(void)" (?swapBuffers@MyGLWindow@@QEAAXXZ)
 main.obj : error LNK2019: unresolved external symbol "public: __cdecl Assimp::Importer::Importer(void)" (??0Importer@Assimp@@QEAA@XZ) referenced in function main
 Model.obj : error LNK2001: unresolved external symbol "public: __cdecl Assimp::Importer::Importer(void)" (??0Importer@Assimp@@QEAA@XZ)
 main.obj : error LNK2019: unresolved external symbol "public: __cdecl Assimp::Importer::~Importer(void)" (??1Importer@Assimp@@QEAA@XZ) referenced in function main
 Model.obj : error LNK2001: unresolved external symbol "public: __cdecl Assimp::Importer::~Importer(void)" (??1Importer@Assimp@@QEAA@XZ)
-main.obj : error LNK2001: unresolved external symbol __imp___glewUniformMatrix4fv
-main.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
-Material.obj : error LNK2001: unresolved external symbol __imp___glewUniform1i
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteBuffers
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewDeleteVertexArrays
-Mesh.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
 Model.obj : error LNK2019: unresolved external symbol "public: struct aiScene const * __cdecl Assimp::Importer::ReadFile(char const *,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBUaiScene@@PEBDI@Z) referenced in function "public: struct aiScene const * __cdecl Assimp::Importer::ReadFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?ReadFile@Importer@Assimp@@QEAAPEBUaiScene@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
 Model.obj : error LNK2019: unresolved external symbol "public: char const * __cdecl Assimp::Importer::GetErrorString(void)const " (?GetErrorString@Importer@Assimp@@QEBAPEBDXZ) referenced in function "public: void __cdecl Model::LoadModel(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?LoadModel@Model@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
-Model.obj : error LNK2019: unresolved external symbol aiGetMaterialTextureCount referenced in function "public: unsigned int __cdecl aiMaterial::GetTextureCount(enum aiTextureType)const " (?GetTextureCount@aiMaterial@@QEBAIW4aiTextureType@@@Z)
 Model.obj : error LNK2019: unresolved external symbol aiGetMaterialTexture referenced in function "public: enum aiReturn __cdecl aiMaterial::GetTexture(enum aiTextureType,unsigned int,struct aiString *,enum aiTextureMapping *,unsigned int *,float *,enum aiTextureOp *,enum aiTextureMapMode *)const " (?GetTexture@aiMaterial@@QEBA?AW4aiReturn@@W4aiTextureType@@IPEAUaiString@@PEAW4aiTextureMapping@@PEAIPEAMPEAW4aiTextureOp@@PEAW4aiTextureMapMode@@@Z)
 MyGLWindow.obj : error LNK2019: unresolved external symbol __imp_glewInit referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwInit referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
@@ -68,30 +148,14 @@ MyGLWindow.obj : error LNK2019: unresolved external symbol glfwWindowHint refere
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwDestroyWindow referenced in function "public: __cdecl MyGLWindow::~MyGLWindow(void)" (??1MyGLWindow@@QEAA@XZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "private: static void __cdecl MyGLWindow::keyPressed(struct GLFWwindow *,int,int,int,int)" (?keyPressed@MyGLWindow@@CAXPEAUGLFWwindow@@HHHH@Z)
-MyGLWindow.obj : error LNK2019: unresolved external symbol glfwGetFramebufferSize referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwSetWindowUserPointer referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwGetWindowUserPointer referenced in function "private: static void __cdecl MyGLWindow::handleMouse(struct GLFWwindow *,double,double)" (?handleMouse@MyGLWindow@@CAXPEAUGLFWwindow@@NN@Z)
-MyGLWindow.obj : error LNK2019: unresolved external symbol glfwSetInputMode referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
-MyGLWindow.obj : error LNK2019: unresolved external symbol glfwSetKeyCallback referenced in function "private: void __cdecl MyGLWindow::createCallbacks(void)" (?createCallbacks@MyGLWindow@@AEAAXXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwSetCursorPosCallback referenced in function "private: void __cdecl MyGLWindow::createCallbacks(void)" (?createCallbacks@MyGLWindow@@AEAAXXZ)
 MyGLWindow.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function "public: int __cdecl MyGLWindow::Initialise(void)" (?Initialise@MyGLWindow@@QEAAHXZ)
 MyGLWindow.obj : error LNK2001: unresolved external symbol __imp_glewExperimental
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewDeleteProgram
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramInfoLog
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetProgramiv
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderInfoLog
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetShaderiv
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewGetUniformLocation
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
-Shader.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
 Shader.obj : error LNK2001: unresolved external symbol __imp___glewValidateProgram
-Texture.obj : error LNK2001: unresolved external symbol __imp___glewActiveTexture
 Texture.obj : error LNK2001: unresolved external symbol __imp___glewGenerateMipmap
-D:\Learning\OpenGL refactor\RTR\\Ext Libs\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
-D:\Learning\OpenGL refactor\RTR\\Ext Libs\GLFW\lib-vc2015\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
-D:\Learning\OpenGL refactor\RTR\\Ext Libs\ASSIMP\lib\assimp-vc140-mt.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
-D:\Learning\OpenGL refactor\RTR\x64\Debug\GL Exp.exe : fatal error LNK1120: 54 unresolved externals
+D:\Learning\OpenGL refactor\Realtime Rendering\\Ext Libs\GLEW\lib\Release\Win32\glew32.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\Learning\OpenGL refactor\Realtime Rendering\\Ext Libs\GLFW\lib-vc2015\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\Learning\OpenGL refactor\Realtime Rendering\\Ext Libs\ASSIMP\lib\assimp-vc140-mt.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+D:\Learning\OpenGL refactor\Realtime Rendering\x64\Debug\Realtime Rendering.exe : fatal error LNK1120: 77 unresolved externals
