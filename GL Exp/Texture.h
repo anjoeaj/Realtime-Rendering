@@ -16,6 +16,7 @@ public:
 	void UseTexture();
 	void ClearTexture();
 	void SetFileLoc(const char* fileLoc);
+	bool LoadTexture(bool needsMipmap);
 
 	~Texture();
 

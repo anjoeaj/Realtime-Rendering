@@ -62,6 +62,8 @@ void RenderHelicopterToon(glm::mat4 &model, const GLuint &uniformModel, const GL
 void RenderHelicopterCookTorrance(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 void RenderEarth(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 void RenderCube(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void RenderPlain(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
+void RenderNonMipmapPlain(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType);
 MyGLWindow mainWindow;
 
 Camera camera;
@@ -82,6 +84,8 @@ Model cube;
 Model skyBoxModelImported;
 Model lowPolyBird;
 Model earthModel;
+Model plainModel;
+Model plainMipmapModel;
 
 //To control the speed of cam movement
 GLfloat deltaTime = 0.0f;
@@ -328,7 +332,7 @@ int main() {
 	//copter.LoadModel("Models/copter.obj");
 
 	skyBoxModelImported = Model();
-	skyBoxModelImported.LoadModel("Models/cube.obj");
+	//skyBoxModelImported.LoadModel("Models/cube.obj");
 
 	//lowPolyBird = Model();
 	//lowPolyBird.LoadModel("Models/teapot.obj");
@@ -340,6 +344,12 @@ int main() {
 	earthModel.LoadModel("Models/earth.obj");
 	earthModel.normalIntensity = 0.6;
 
+	plainModel = Model();
+	plainModel.needsMipmap = false;
+	plainModel.LoadModel("Models/LargePlain.obj");
+
+	plainMipmapModel = Model();
+	plainMipmapModel.LoadModel("Models/LargePlain.obj");
 
 	cube = Model();
 	cube.LoadModel("Models/sCube.obj");
@@ -367,6 +377,7 @@ int main() {
 
 	bool flyThrough = true;
 	bool normalMapping = false;
+	bool mipmaps = false;
 
 	glm::vec3 lightPosition(10.0, 10.0, 10.0);
 	
@@ -413,6 +424,8 @@ int main() {
 			ImGui::Checkbox("Enable flythrough (Press F to toggle)", &mainWindow.flyThrough);
 			ImGui::Checkbox("Enable Normal Mapping", &normalMapping);
 
+			ImGui::Checkbox("Enable Mipmaps", &mipmaps);
+
 			//ImGui::SliderFloat("Normal map intensity", &earthModel.normalIntensity, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 			//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
@@ -450,7 +463,7 @@ int main() {
 			
 
 		//Clear window
-		glClearColor(0.1f, 0.5f, 0.5f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//use main shader
@@ -500,8 +513,18 @@ int main() {
 
 		
 		glm::mat4 model = glm::mat4(1.0f);
+		//goldTexture.UseTexture();
+		//RenderEarth(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+		if (mipmaps) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		RenderEarth(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		RenderPlain(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+
+		RenderNonMipmapPlain(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 		//RenderCube(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 
 		//RenderFloor(model, uniformModel, uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
@@ -652,6 +675,34 @@ void RenderEarth(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uni
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 	cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
 	earthModel.RenderModel();
+}
+
+void RenderPlain(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType) {
+
+	model = glm::mat4(1.0f);
+
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 1.1f, 1.01f, 1.01f));
+	//model = glm::scale(model, glm::vec3(orthoXFactor() * 1.001f, 1.001f, 1.001f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(-15.0f, 3.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	//cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	plainMipmapModel.RenderModel();
+}
+
+void RenderNonMipmapPlain(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType) {
+
+	model = glm::mat4(1.0f);
+
+	model = glm::scale(model, glm::vec3(orthoXFactor() * 1.1f, 1.01f, 1.01f));
+	//model = glm::scale(model, glm::vec3(orthoXFactor() * 1.001f, 1.001f, 1.001f));
+	model = glm::rotate(model, animationFactor, glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0f));
+
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	//cookTorranceMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess, uniformIlluminationType);
+	plainModel.RenderModel();
 }
 
 void RenderCube(glm::mat4 &model, const GLuint &uniformModel, const GLuint &uniformSpecularIntensity, const GLuint &uniformShininess, const GLuint &uniformIlluminationType) {

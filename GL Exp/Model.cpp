@@ -150,12 +150,12 @@ void Model::LoadMaterials(const aiScene * scene)
 		material->GetTexture(aiTextureType_SPECULAR, 0, &specular_texture_path);
 		material->GetTexture(aiTextureType_HEIGHT, 0, &bump_texture_path);
 		material->GetTexture(aiTextureType_NORMALS, 0, &normal_texture_path);
-
+/*
 		printf("AmbientTexture: %s", ambient_texture_path.C_Str());
 		printf("DiffuseTexture: %s", diffuse_texture_path.C_Str());
 		printf("SpecularTexture: %s", specular_texture_path.C_Str());
 		printf("BumpTexture: %s", bump_texture_path.C_Str());
-		printf("Normal tex: %s", normal_texture_path.C_Str());
+		printf("Normal tex: %s", normal_texture_path.C_Str());*/
 
 		int c2c = material->GetTextureCount(aiTextureType_DIFFUSE);
 		int cc = material->GetTextureCount(aiTextureType_NORMALS);
@@ -185,7 +185,7 @@ void Model::LoadMaterials(const aiScene * scene)
 
 			textureList[i] = new Texture(texPath.c_str());
 
-			if (!textureList[i]->LoadTexture())
+			if (needsMipmap ? !textureList[i]->LoadTexture() : !textureList[i]->LoadTexture(false))
 			{
 				printf("Failed to load texture at: %s\n", texPath);
 				delete textureList[i];

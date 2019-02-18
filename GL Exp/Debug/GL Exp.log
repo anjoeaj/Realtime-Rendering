@@ -1,3 +1,13 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (GL Exp.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Texture.cpp
+  main.cpp
+c:\program files (x86)\windows kits\10\include\10.0.17134.0\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  d:\learning\opengl refactor\realtime rendering\ext libs\glfw\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(327): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(345): warning C4305: '=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(356): warning C4305: '=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(452): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(474): warning C4244: 'argument': conversion from 'GLuint' to 'GLfloat', possible loss of data
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(617): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(624): warning C4305: '+=': truncation from 'double' to 'GLfloat'
+d:\learning\opengl refactor\realtime rendering\gl exp\main.cpp(626): warning C4305: '-=': truncation from 'double' to 'GLfloat'
   GL Exp.vcxproj -> D:\Learning\OpenGL refactor\Realtime Rendering\Debug\Realtime Rendering.exe

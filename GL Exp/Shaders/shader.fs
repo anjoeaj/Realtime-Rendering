@@ -340,13 +340,13 @@ void main()
 	SetPointLightProperties();
 	if(textureMapType == 1){
 		alterNormals();
-		//colour = normalMapping();
-		//colour = Phong();
+
 		colour = pointLightShading();
-		//colour = vec4 (bumpMapTangents.T, 1.0f);
+
 	}else {
 		colour = pointLightShading();
 	}
+	colour = vec4(texture(theTexture, TexCoord).rgb, 1.0);
 		
 	/*
 	if(material.illuminationType == 0)

@@ -20,6 +20,7 @@ public:
 	void ClearModel();
 
 	GLfloat normalIntensity = 0;
+	bool needsMipmap = true;
 
 	~Model();
 
